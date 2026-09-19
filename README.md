@@ -2,7 +2,7 @@
 
 **NORE** (Nutrition Oncology Reasoning Engine) is a domain-specific benchmark and training dataset for evaluating AI models’ ability to reason over nutrition-oncology evidence and produce concise, objectively gradable answers.
 
-This repository contains the two-stage pipeline that is used to build NORE: harvesting open-access oncology nutrition literature, then generating short-answer Q/A pairs (1–3 word, exact-match answers) following LIMO principles [[1]](#references), designed for RLHF fine-tuning (next phase - cominging soon).
+This repository contains the two-stage pipeline that is used to build NORE: harvesting open-access oncology nutrition literature, then generating short-answer Q/A pairs (1–3 word, exact-match answers) following LIMO principles [[1]](#references), designed for RLVR fine-tuning (next phase - coming soon).
 
 ## Project Status (September 2026)
 
@@ -48,7 +48,7 @@ PubMed / Europe PMC
 └────────┬───────────────────────────┘
          │  JSONL
          ▼
-  Deduplicate → Compile CSV → RLHF Training
+  Deduplicate → Compile CSV → RLVR Training
 ```
 
 ### Stage 1: Harvest (`nore_paper_harvester.py`)
@@ -56,7 +56,7 @@ PubMed / Europe PMC
 1. **Discover** candidate papers via PubMed E-utilities + Europe PMC using topic-specific MeSH queries
 2. **Screen** abstracts through an LLM relevance gate (score >= 6/10 to pass)
 3. **Locate** open-access PDF URLs via PMC OA, Unpaywall, or Europe PMC
-4. **Extract** full text via Firecrawl server-side PDF parsing (default), or download PDFs locally (`--download-pdfs` for RLHF traceability)
+4. **Extract** full text via Firecrawl server-side PDF parsing (default), or download PDFs locally (`--download-pdfs` for RLVR traceability)
 
 ### Stage 2: Train (`mupdf_trainer_v3.py`)
 
@@ -67,7 +67,7 @@ PubMed / Europe PMC
 9. **Generate** freeform Q/A pairs via LLM (OpenAI or Together AI)
 10. **Verify** quality through heuristic checks + LLM semantic verification (optional)
 11. **Deduplicate** via human-in-the-loop Excel triage with semantic similarity
-12. **Compile** to CSV for downstream RLHF training
+12. **Compile** to CSV for downstream RLVR training
 
 ## Pipeline Files
 
@@ -118,7 +118,7 @@ python nore_paper_harvester.py --email your@email.com
 # Single topic with limit
 python nore_paper_harvester.py --email your@email.com --topic drug_nutrient --max-per-topic 100
 
-# Download PDFs locally instead (for RLHF traceability)
+# Download PDFs locally instead (for RLVR traceability)
 python nore_paper_harvester.py --email your@email.com --download-pdfs
 
 # Resume interrupted run
@@ -220,7 +220,7 @@ Each Q/A record is a JSON object in JSONL format:
 }
 ```
 
-Answers are constrained to 1-3 words for exact-match RLHF grading.
+Answers are constrained to 1-3 words for exact-match RLVR grading.
 
 ## LLM Backend
 
@@ -243,8 +243,8 @@ When `--enable-verification` is set, each Q/A pair goes through:
 
 ## Key Design Decisions
 
-- **Firecrawl as default** (v4): Server-side PDF extraction produces cleaner text than local PyMuPDF (no column blending, header/footer artifacts). PDF download preserved as `--download-pdfs` for RLHF traceability.
-- **Freeform-only** (v3): MCQ and reasoning question types were removed because their answers (7-15 words) were too long for exact-match RLHF grading. Freeform produces clean 1-3 word answers.
+- **Firecrawl as default** (v4): Server-side PDF extraction produces cleaner text than local PyMuPDF (no column blending, header/footer artifacts). PDF download preserved as `--download-pdfs` for RLVR traceability.
+- **Freeform-only** (v3): MCQ and reasoning question types were removed because their answers (7-15 words) were too long for exact-match RLVR grading. Freeform produces clean 1-3 word answers.
 - **Human-in-the-loop dedup**: Automated Union-Find clustering destroyed 85% of data through transitive chaining. The current system uses direct pairwise similarity with human confirmation in Excel.
 - **Seen-answers injection**: Reduces within-PDF duplicate questions by injecting prior chunk answers as exclusions into the freeform prompt.
 - **Dependency injection**: The skeleton receives `llm_fn` and `json_parser_fn` as arguments, keeping it backend-agnostic.
@@ -300,7 +300,7 @@ Superseded March 2026 drafts live in [`archive/dev-2026-03/`](archive/dev-2026-0
 
 ## Context
 
-This pipeline is part of the **NORE** (Nutrition Oncology Reasoning Engine) project at [Baylor University Greathouse Lab](https://github.com/GreathouseLab), developed in collaboration with Nick Chia at Argonne National Laboratory. The generated Q/A datasets are used for RLHF fine-tuning of domain-specific language models for clinical nutrition and oncology applications.
+This pipeline is part of the **NORE** (Nutrition Oncology Reasoning Engine) project at [Baylor University Greathouse Lab](https://github.com/GreathouseLab), developed in collaboration with Nick Chia at Argonne National Laboratory. The generated Q/A datasets are used for RLVR fine-tuning of domain-specific language models for clinical nutrition and oncology applications.
 
 ## References
 

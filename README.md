@@ -6,7 +6,7 @@ This repository contains the two-stage pipeline that builds it: harvesting open-
 
 ## Project Status (September 2026)
 
-The sabbatical phase (June 2025 – August 2026) is complete; **model training is the next phase.** The data-generation pipeline is working end to end. Training was deferred for lack of compute access and collaborator time, not because of pipeline problems.
+The sabbatical phase (June 2025 – August 2026) is complete; **model training is the next phase.** The data-generation pipeline is working end to end.
 
 **Completed**
 - Harvest → extract → chunk → gate → generate → verify → dedup pipeline (this repo), with Firecrawl as the default extractor

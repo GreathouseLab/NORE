@@ -24,3 +24,14 @@ qa_jsonl/
 # IDE settings
 .vscode/
 .idea/
+
+# Harvest outputs and test runs (large; shared via Box, not GitHub)
+harvested_papers/
+harvested_papers_firecrawl/
+PDFsv2/
+test_*/
+harvest_*.txt
+test_6topics_output.txt
+
+# R
+.Rhistory

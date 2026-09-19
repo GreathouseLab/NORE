@@ -9,7 +9,7 @@
 
 ## Overview
 
-The NORE (Nutrition Oncology Research Engine) pipeline is a two-stage system: **Harvest** papers, then **Train** Q/A pairs.
+The NORE (Nutrition Oncology Reasoning Engine) pipeline is a two-stage system: **Harvest** papers, then **Train** Q/A pairs.
 
 **v4 key change:** Firecrawl is now the default text extraction method. Papers are extracted server-side as markdown — no local PDF download required. PDF download is available as an opt-in (`--download-pdfs`) for RLHF traceability.
 

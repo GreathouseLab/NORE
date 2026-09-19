@@ -223,3 +223,14 @@ git checkout v2-comprehensive-archive
 # Compare old vs new
 git diff v2-comprehensive-archive main -- llm_adapter.py
 ```
+
+---
+
+## 2026-09-19 — Sabbatical status update (`docs/sabbatical-status-2026-09`)
+
+- README: added Project Status section (sabbatical phase complete, training next), deduplicated corpus counts (2,253 unique papers by DOI/PMID; 6,021 files on disk), holdout-set and baseline notes, open harvest data-quality issue; refreshed branch table; project name corrected to "Nutrition Oncology Reasoning Engine" (also in PIPELINE_ARCHITECTURE.md).
+- Committed `test_harvester.sh` and `run_diagnostic.sh`.
+- Archived superseded March drafts (`nore_paper_harvester_v2.py`, `nore_mesh_queries.py`, `nore_topic_queries_update.py`, `llm_adapter_v2.py`) to `archive/dev-2026-03/`.
+- `.gitignore`: harvest outputs, test run directories, harvest logs, `.Rhistory`.
+- `mupdf_trainer_v3.py`: documented `FIRECRAWL_API_KEY` in the setup comments.
+- Still untracked by choice: docs for Nick, sabbatical report .docx, `qa_clean.jsonl`, `triage_workbook.xlsx`.

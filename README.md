@@ -2,7 +2,7 @@
 
 **NORE** (Nutrition Oncology Reasoning Engine) is a domain-specific benchmark and training dataset for evaluating AI models’ ability to reason over nutrition-oncology evidence and produce concise, objectively gradable answers.
 
-This repository contains the two-stage pipeline that builds it: harvesting open-access oncology nutrition literature, then generating short-answer Q/A pairs (1–3 word, exact-match answers) following LIMO principles [[1]](#references), designed for RLHF fine-tuning.
+This repository contains the two-stage pipeline that is used to build NORE: harvesting open-access oncology nutrition literature, then generating short-answer Q/A pairs (1–3 word, exact-match answers) following LIMO principles [[1]](#references), designed for RLHF fine-tuning (next phase - cominging soon).
 
 ## Project Status (September 2026)
 
@@ -17,10 +17,8 @@ The sabbatical phase (June 2025 – August 2026) is complete; **model training i
 **Not yet done**
 - Automated validation + dedup of the full corpus; expert review by oncology dietitians
 - Final train/validation/holdout partitions and a safety/edge-case benchmark
-- Base-model selection and adaptation (prompt tuning, LoRA/SFT, or RL); compute (Argonne Aurora, local LM Studio) still being arranged
-- Post-training evaluation, manuscript, dataset release
-
-**Open data-quality issue:** `harvest_summary.txt` totals do not reconcile with its per-topic lines, and fetch/parse errors rival downloads in several topics (e.g. cancer_malnutrition: 1,025 errors vs 475 downloads). Triage the error classes before harvesting more.
+- Base-model selection and adaptation (prompt tuning, LoRA/SFT, or RL)
+- Post-training evaluation and evaluation metric development
 
 | Topic | Papers |
 |-------|-------:|
@@ -31,7 +29,6 @@ The sabbatical phase (June 2025 – August 2026) is complete; **model training i
 | `immunotherapy_nutrition` | 290 |
 | `drug_nutrient` | 54 |
 
-The `harvested_papers/2026-03-17/` re-run contributed only 13 papers not already in the topic folders.
 
 ## What It Does
 

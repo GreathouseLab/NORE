@@ -2,7 +2,36 @@
 
 A two-stage pipeline for harvesting oncology nutrition research papers and generating short-answer Q/A training data using LIMO principles, designed for RLHF fine-tuning.
 
-**NORE** (Nutrition-Oncology Research Engine) produces exact-match Q/A pairs (1-3 word answers) from clinical nutrition and oncology literature for training domain-specific language models.
+**NORE** (Nutrition Oncology Reasoning Engine) produces exact-match Q/A pairs (1-3 word answers) from clinical nutrition and oncology literature for training domain-specific language models.
+
+## Project Status (September 2026)
+
+The sabbatical phase (June 2025 – August 2026) is complete; **model training is the next phase.** The data-generation pipeline is working end to end. Training was deferred for lack of compute access and collaborator time, not because of pipeline problems.
+
+**Completed**
+- Harvest → extract → chunk → gate → generate → verify → dedup pipeline (this repo), with Firecrawl as the default extractor
+- Harvested corpus: **2,253 unique papers** (deduplicated by DOI/PMID) across 6 topics, 6,021 files on disk (PDFs, Firecrawl text, metadata sidecars; shared via Box, not in this repo)
+- Initial nutrition Q/A set reserved as a **holdout evaluation set**; training data is to come from separate papers to avoid leakage
+- Preliminary baseline: an off-the-shelf model answered ~72% of nutrition questions on first pass vs ~80% on general biology questions (preliminary; validation incomplete)
+
+**Not yet done**
+- Automated validation + dedup of the full corpus; expert review by oncology dietitians
+- Final train/validation/holdout partitions and a safety/edge-case benchmark
+- Base-model selection and adaptation (prompt tuning, LoRA/SFT, or RL); compute (Argonne Aurora, local LM Studio) still being arranged
+- Post-training evaluation, manuscript, dataset release
+
+**Open data-quality issue:** `harvest_summary.txt` totals do not reconcile with its per-topic lines, and fetch/parse errors rival downloads in several topics (e.g. cancer_malnutrition: 1,025 errors vs 475 downloads). Triage the error classes before harvesting more.
+
+| Topic | Papers |
+|-------|-------:|
+| `microbiome_diet_cancer` | 542 |
+| `dietary_patterns` | 539 |
+| `cancer_malnutrition` | 475 |
+| `cachexia_sarcopenia` | 343 |
+| `immunotherapy_nutrition` | 290 |
+| `drug_nutrient` | 54 |
+
+The `harvested_papers/2026-03-17/` re-run contributed only 13 papers not already in the topic folders.
 
 ## What It Does
 
@@ -236,6 +265,9 @@ When `--enable-verification` is set, each Q/A pair goes through:
 ├── duplicate_triage.py          # Human-in-the-loop dedup
 ├── compile_qa.py                # CSV export
 ├── firecrawl_extract.py         # Standalone Firecrawl batch extraction
+├── test_harvester.sh            # Progressive staged test of the harvester
+├── run_diagnostic.sh            # Verbose 5-paper harvest for debugging downloads
+├── archive/dev-2026-03/         # Superseded harvester/adapter drafts
 ├── requirements.txt             # Python dependencies
 ├── .env                         # API keys (not committed)
 ├── PIPELINE_ARCHITECTURE.md     # Detailed architecture documentation
@@ -254,9 +286,11 @@ When `--enable-verification` is set, each Q/A pair goes through:
 
 | Branch | Description |
 |--------|-------------|
-| `main` | v3 freeform-only pipeline |
-| `feature/firecrawl-integration` | v4 with Firecrawl harvesting + text source routing |
+| `main` | v4 pipeline: freeform-only Q/A generation + Firecrawl harvesting (merged from `feature/firecrawl-integration`, PR #3) |
 | `v2-comprehensive-archive` | Previous v2 pipeline with MCQ + reasoning + freeform generation |
+| `fix/add-pymupdf-dependency` | No commits beyond `main`; safe to delete |
+
+Superseded March 2026 drafts live in [`archive/dev-2026-03/`](archive/dev-2026-03/).
 
 ## Requirements
 
@@ -269,4 +303,4 @@ When `--enable-verification` is set, each Q/A pair goes through:
 
 ## Context
 
-This pipeline is part of the **NORE** (Nutrition-Oncology Research Engine) project at [Baylor University Greathouse Lab](https://github.com/GreathouseLab), developed in collaboration with Argonne National Lab. The generated Q/A datasets are used for RLHF fine-tuning of domain-specific language models for clinical nutrition and oncology applications.
+This pipeline is part of the **NORE** (Nutrition Oncology Reasoning Engine) project at [Baylor University Greathouse Lab](https://github.com/GreathouseLab), developed in collaboration with Nick Chia at Argonne National Laboratory. The generated Q/A datasets are used for RLHF fine-tuning of domain-specific language models for clinical nutrition and oncology applications.

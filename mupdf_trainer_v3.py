@@ -47,7 +47,7 @@
 # pip install --upgrade pymupdf
 # pip install -r requirements.txt 
 # pip install firecrawl
-
+# export FIRECRAWL_API_KEY=fc-...  (if using Firecrawl text source)
 # export OPENAI_API_KEY=...
 # export TOGETHER_API_KEY=...  (if using Together models)
 

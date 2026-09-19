@@ -1,12 +1,12 @@
 # NORE Q/A Generation Pipeline
 
-A two-stage pipeline for harvesting oncology nutrition research papers and generating short-answer Q/A training data using LIMO principles, designed for RLHF fine-tuning.
+**NORE** (Nutrition Oncology Reasoning Engine) is a domain-specific benchmark and training dataset for evaluating AI models’ ability to reason over nutrition-oncology evidence and produce concise, objectively gradable answers.
 
-**NORE** (Nutrition Oncology Reasoning Engine) produces exact-match Q/A pairs (1-3 word answers) from clinical nutrition and oncology literature for training domain-specific language models.
+This repository contains the two-stage pipeline that builds it: harvesting open-access oncology nutrition literature, then generating short-answer Q/A pairs (1–3 word, exact-match answers) following LIMO principles [[1]](#references), designed for RLHF fine-tuning.
 
 ## Project Status (September 2026)
 
-The sabbatical phase (June 2025 – August 2026) is complete; **model training is the next phase.** The data-generation pipeline is working end to end. Training was deferred for lack of compute access and collaborator time, not because of pipeline problems.
+The sabbatical phase (June 2025 – August 2026) is complete; **model training is the next phase.** The data-generation pipeline is working end to end.
 
 **Completed**
 - Harvest → extract → chunk → gate → generate → verify → dedup pipeline (this repo), with Firecrawl as the default extractor
@@ -304,3 +304,30 @@ Superseded March 2026 drafts live in [`archive/dev-2026-03/`](archive/dev-2026-0
 ## Context
 
 This pipeline is part of the **NORE** (Nutrition Oncology Reasoning Engine) project at [Baylor University Greathouse Lab](https://github.com/GreathouseLab), developed in collaboration with Nick Chia at Argonne National Laboratory. The generated Q/A datasets are used for RLHF fine-tuning of domain-specific language models for clinical nutrition and oncology applications.
+
+## References
+
+**Training-data design**
+
+1. Ye Y, Huang Z, Xiao Y, Chern E, Xia S, Liu P. LIMO: Less is More for Reasoning. *arXiv* 2502.03387, 2025. https://arxiv.org/abs/2502.03387
+2. Zhou C, Liu P, Xu P, et al. LIMA: Less Is More for Alignment. *NeurIPS* 2023. https://arxiv.org/abs/2305.11206
+
+**Objectively graded rewards (exact-match answers for RL)**
+
+3. Lambert N, Morrison J, Pyatkin V, et al. Tülu 3: Pushing Frontiers in Open Language Model Post-Training. *arXiv* 2411.15124, 2024. https://arxiv.org/abs/2411.15124 (reinforcement learning with verifiable rewards)
+4. DeepSeek-AI. DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning. *arXiv* 2501.12948, 2025. https://arxiv.org/abs/2501.12948
+
+**Biomedical Q/A benchmarks**
+
+5. Jin Q, Dhingra B, Liu Z, Cohen WW, Lu X. PubMedQA: A Dataset for Biomedical Research Question Answering. *EMNLP-IJCNLP* 2019. https://arxiv.org/abs/1909.06146
+6. Jin D, Pan E, Oufattole N, Weng WH, Fang H, Szolovits P. What Disease Does This Patient Have? A Large-Scale Open Domain Question Answering Dataset from Medical Exams. *Applied Sciences* 11(14):6421, 2021. https://doi.org/10.3390/app11146421
+
+**Clinical guidelines (source domain)**
+
+7. Arends J, Bachmann P, Baracos V, et al. ESPEN guidelines on nutrition in cancer patients. *Clinical Nutrition* 36(1):11–48, 2017. https://doi.org/10.1016/j.clnu.2016.07.015
+8. Muscaritoli M, Arends J, Bachmann P, et al. ESPEN practical guideline: Clinical Nutrition in cancer. *Clinical Nutrition* 40(5):2898–2913, 2021. https://doi.org/10.1016/j.clnu.2021.02.005
+
+**Methods used in the pipeline**
+
+9. Reimers N, Gurevych I. Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. *EMNLP-IJCNLP* 2019. https://arxiv.org/abs/1908.10084 (semantic similarity in `duplicate_triage.py`)
+10. Hu EJ, Shen Y, Wallis P, et al. LoRA: Low-Rank Adaptation of Large Language Models. *ICLR* 2022. https://arxiv.org/abs/2106.09685 (candidate adaptation method)
